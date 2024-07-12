@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        .image-placeholder img {
+            background-size: cover;
+            max-height: 100%;
+            max-width: 100%;
+        }
+        .image-placeholder {
+            width: 80%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            
+        }
+        .slider-container div{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .slider-container {
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .slider-container img {
+            width: 24px;
+            height: 24px;
+        }
+        .slider-container input[type="range"] {
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+        .board {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+        }
+        .column {
+            width: 30%;
+            padding: 10px;
+        }
+        .column h2 {
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 10px 0;
+            margin: 0 0 10px 0;
+        }
+        .sticky {
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            cursor: pointer;
+            color: #323232;
+            font-size: large;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-placeholder">
+        <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*wdw2ydmvO7gX5bQ4yzzvhw.png" alt="PO PM">
+    </div>
+    <div class="slider-container">
+        <div>Focus Discovery<img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search Icon"></div>
+        <input id="color-slider" type="range" min="-100" max="100" value="0">
+        <div>Focus Technique<img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Cog Icon"></div>
+    </div>
+    <div class="board">
+        <div class="column" id="discovery-column">
+            <h2>Discovery</h2>
+        </div>
+        <div class="column" id="delivery-column">
+            <h2>Delivery</h2>
+        </div>
+        <div class="column" id="promotion-column">
+            <h2>Promotion</h2>
+        </div>
+    </div>
+
+    <script>
+        const jsonData = [
+     {
+        "level": 1,
+        "text": "Product Organisation Maturity - Level 1",
+        "Discovery": [
+            {
+                "name": "Priorisation des sujets et des besoins utilisateur",
+                "kpis": "",
+                "ponderation_pm": 0.6,
+                "ponderation_po": 0.4
+            },
+            {
+                "name": "Comprendre les besoins des clients pour les traduire",
+                "kpis": "session de user discovery, user interview",
+                "ponderation_pm": 0.6,
+                "ponderation_po": 0.4
+            },
+            {
+                "name": "Revue de roadmap",
+                "kpis": "Roadmap review toutes les 6 semaines",
+                "ponderation_pm": 0.7,
+                "ponderation_po": 0.3
+            },
+            {
+                "name": "Orientation du produit",
+                "kpis": "Outcome roadmap aligné sur North Star",
+                "ponderation_pm": 0.8,
+                "ponderation_po": 0.2
+            },
+            {
+                "name": "Inscrire son produit dans la logique de l’entreprise / de la direction",
+                "kpis": "Outcome roadmap aligné sur North Star",
+                "ponderation_pm": 0.6,
+                "ponderation_po": 0.4
+            },
+            {
+                "name": "Participation à la construction de la vision produit avec le PM",
+                "kpis": "un périmètre produit défini et une cible identifiée / North Star",
+                "ponderation_pm": 0.8,
+                "ponderation_po": 0.2
+            }
+        ],
+        "Delivery": [
+            {
+                "name": "User story",
+                "kpis": "Persona centric/ Acceptance criterias",
+                "ponderation_pm": 0.4,
+                "ponderation_po": 0.6
+            },
+            {
+                "name": "Gérer la backlog du produit / prioriser les éléments",
+                "kpis": "90% du backlog done a la fin de l’iteration",
+                "ponderation_pm": 0.1,
+                "ponderation_po": 0.9
+            },
+            {
+                "name": "Iteration Planning Meeting",
+                "kpis": "",
+                "ponderation_pm": 0.4,
+                "ponderation_po": 0.6
+            },
+            {
+                "name": "Feature dev",
+                "kpis": "",
+                "ponderation_pm": 0,
+                "ponderation_po": 1
+            },
+            {
+                "name": "Retrospective",
+                "kpis": "",
+                "ponderation_pm": 0.5,
+                "ponderation_po": 0.5
+            },
+            {
+                "name": "Align team Align team on Backlog and Roadmap",
+                "kpis": "",
+                "ponderation_pm": 0.4,
+                "ponderation_po": 0.6
+            },
+            {
+                "name": "Est garant de la qualité du produit",
+                "kpis": "mesure de la qualité (SLI/SLO)",
+                "ponderation_pm": 0.05,
+                "ponderation_po": 0.9
+            },
+            {
+                "name": "Réferent de l’équipe pour expliquer l’attendue",
+                "kpis": "",
+                "ponderation_pm": 0.1,
+                "ponderation_po": 0.9
+            },
+            {
+                "name": "Assurer le reporting du produit",
+                "kpis": "pas de doublon dans les communications, informations transmises",
+                "ponderation_pm": 0.1,
+                "ponderation_po": 0.9
+            },
+            {
+                "name": "Gestion de la dette technique",
+                "kpis": "au moins 1 sprint par incrément dédié à la gestion de la dette technique",
+                "ponderation_pm": 0.2,
+                "ponderation_po": 1
+            },
+            {
+                "name": "Organisation des MEP (planif, suivi du bon déroulement, tests)",
+                "kpis": "100% des MEP planifiées et validées",
+                "ponderation_pm": 0.5,
+                "ponderation_po": 0.5
+            }
+        ],
+        "Promotion": [
+            {
+                "name": "Onboarding / Accompanement MEP jusqu'aux utilisateurs",
+                "kpis": "Guide utilisateur le plus simple possible/Self-service",
+                "ponderation_pm": 0.5,
+                "ponderation_po": 0.5
+            },
+            {
+                "name": "Interaction avec les parties prenantes",
+                "kpis": "Participation aux démos",
+                "ponderation_pm": 0.3,
+                "ponderation_po": 0.7
+            },
+            {
+                "name": "Tracer l’utilisation du produit et la retention",
+                "kpis": "",
+                "ponderation_pm": 0.7,
+                "ponderation_po": 0.3
+            }
+        ]
+    },
+    {
+        "level": 2,
+        "text": "Product Organisation Maturity - Level 2",
+        "Discovery": [
+            {
+                "name": "User/Persona discovery",
+                "kpis": "",
+                "ponderation_pm": 0,
+                "ponderation_po": 0
+            }
+        ],
+        "Delivery": [
+            {
+                "name": "SRE/Chaos Eng/Observability(SLI)",
+                "kpis": "",
+                "ponderation_pm": 0,
+                "ponderation_po": 0
+            },
+            {
+                "name": "Responsable de l'expérience utilisateur",
+                "kpis": "mesure de la satisfaction, capture de feedback ",
+                "ponderation_pm": 0.9,
+                "ponderation_po": 0.1
+            }
+        ],
+        "Promotion": [
+            {
+                "name": "Responsable du Marketing du produit",
+                "kpis": "",
+                "ponderation_pm": 0.9,
+                "ponderation_po": 0.1
+            }
+        ]
+    },
+    {
+        "level": 3,
+        "text": "Product Organisation Maturity - Level 3",
+        "Discovery": [
+            {
+                "name": "Hypothesis/Lean Experiment",
+                "kpis": "",
+                "ponderation_pm": 0,
+                "ponderation_po": 0
+            },
+            {
+                "name": "SLO/SLA",
+                "kpis": "",
+                "ponderation_pm": 0,
+                "ponderation_po": 0
+            }
+        ],
+        "Delivery": [],
+        "Promotion": []
+    }
+];
+
+
+        function loadStickies() {
+            for (const [column, stickies] of Object.entries(jsonData)) {
+                const columnElement = document.getElementById(`${column.toLowerCase()}-column`);
+                stickies.forEach(sticky => {
+                    const stickyElement = document.createElement('div');
+                    stickyElement.className = 'sticky';
+                    stickyElement.dataset.pm = sticky.ponderation_pm;
+                    stickyElement.dataset.po = sticky.ponderation_po;
+                    stickyElement.innerText = `${sticky.name} \n\n KPIs: ${sticky.kpis}`;
+                    columnElement.appendChild(stickyElement);
+                });
+            }
+            updateStickyColors();
+        }
+        function calMiddleColorPosition(x, ponderation_pm, ponderation_po) {
+            if(x == 0){
+                if (ponderation_pm > ponderation_po){
+                    return 100 * ponderation_pm;
+                }else{
+                    return 100 * (1-ponderation_po)
+                }
+            }
+            else if(x < 0){
+                const offset = 0.2 * -x; 
+                return ponderation_pm == 0 ? 0 : 100 * ponderation_pm + offset;
+            }else{
+                return ponderation_po == 0 ? 100 : 100 - 100 * ponderation_po - (0.2 * x);
+            }
+        }
+          
+        function updateStickyColors() {
+            const sliderValue = parseInt(document.getElementById('color-slider').value);
+            console.log(sliderValue)
+            const stickies = document.querySelectorAll('.sticky');
+            stickies.forEach(sticky => {
+                const pm = parseFloat(sticky.dataset.pm);
+                const po = parseFloat(sticky.dataset.po);
+                let middleColorPosition = calMiddleColorPosition(sliderValue,pm,po);
+                if (po == 0 && pm == 0){
+                    sticky.style.background = `white`
+                }else{
+                    sticky.style.background = `linear-gradient(71deg, rgba(228,204,255,1) ${middleColorPosition}%, rgba(237,243,178,1) ${middleColorPosition}%)`;
+                }
+            });
+        }
+        document.getElementById('color-slider').addEventListener('input', updateStickyColors);
+        document.addEventListener('DOMContentLoaded', loadStickies);
+    </script>
+</body>
+</html>
